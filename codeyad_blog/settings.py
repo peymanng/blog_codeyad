@@ -25,6 +25,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # my apps
+    'posts.apps.PostsConfig',
+    # django-taggit
+    'taggit',
+    # django-ckeditor
+    'ckeditor_uploader',
+    'ckeditor',
 ]
 
 MIDDLEWARE = [
