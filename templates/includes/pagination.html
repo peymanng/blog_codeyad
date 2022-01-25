@@ -1,0 +1,14 @@
+{% if page.has_other_pages %}
+<div class="col-lg-12">
+    <ul class="page-numbers">
+        {% if page.has_previous %}
+            <li><a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+        {% endif %}
+        <li class="active"><a href="?page={{ page.number }}">{{ page.number }}</a></li>
+        {% if page.has_next %}
+            <li><a href="?page={{ page.next_page_number }}">{{ page.next_page_number }}</a></li>
+            <li><a href="?page={{ page.next_page_number }}"><i class="fa fa-angle-double-right"></i></a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
