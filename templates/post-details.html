@@ -211,12 +211,9 @@ Stand Blog - Post Details
                     </div>
                     <div class="content">
                       <ul>
-                        <li><a href="#">- Nature Lifestyle</a></li>
-                        <li><a href="#">- Awesome Layouts</a></li>
-                        <li><a href="#">- Creative Ideas</a></li>
-                        <li><a href="#">- Responsive Templates</a></li>
-                        <li><a href="#">- HTML5 / CSS3 Templates</a></li>
-                        <li><a href="#">- Creative &amp; Unique</a></li>
+                          {% for category in all_categories %}
+                            <li><a href="#">- {{ category.title}}</a></li>
+                          {% endfor %}
                       </ul>
                     </div>
                   </div>
@@ -228,10 +225,9 @@ Stand Blog - Post Details
                     </div>
                     <div class="content">
                       <ul>
-                    {% for post_tag in post.tags.all %}
-{#                      <li><a href="{% url 'posts_tag' post_tag.slug %}">{{post_tag.name}}</a>,</li>#}
-                        <li><a href="#">{{post_tag.name}}</a></li>
-                    {% endfor %}
+                          {% for tag in all_tags %}
+                            <li><a href="#">{{ tag.name }}</a></li>
+                          {% endfor %}
                       </ul>
                     </div>
                   </div>
