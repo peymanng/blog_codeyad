@@ -60,7 +60,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'posts.context_processors.all_tags',
-                'posts.context_processors.all_categories'
+                'posts.context_processors.all_categories',
+                'posts.context_processors.recent_posts',
             ],
         },
     },
