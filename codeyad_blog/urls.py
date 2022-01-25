@@ -6,7 +6,9 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.HomeView.as_view()),
+    path('', views.HomeView.as_view() , name='home'),
+    path('about-us', views.AboutUsView.as_view() , name='about'),
+    path('contact-us', views.ContactUsView.as_view() , name='contact'),
     path('posts/', include('posts.urls')),
     path('ckeditor/', include('ckeditor_uploader.urls')),
 ]
