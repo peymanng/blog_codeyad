@@ -4,7 +4,7 @@ from .models import  Post , Category , Author
 # Register your models here.
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title' , 'get_categories', 'slug' , 'get_visits' , 'number_of_likes' , 'tag_list' , 'pub_date')
+    list_display = ('title' , 'get_categories', 'slug' , 'tag_list' , 'pub_date')
     prepopulated_fields = {'slug' : ('title' ,)}
 
     def get_queryset(self, request):
