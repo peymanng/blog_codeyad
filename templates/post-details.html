@@ -207,7 +207,7 @@ Stand Blog - Post Details
                     <div class="content">
                       <ul>
                           {% for category in all_categories %}
-                            <li><a href="#">- {{ category.title}}</a></li>
+                            <li><a href="{% url 'posts_by_category' category.slug %}">- {{ category.title}}</a></li>
                           {% endfor %}
                       </ul>
                     </div>
@@ -221,7 +221,7 @@ Stand Blog - Post Details
                     <div class="content">
                       <ul>
                           {% for tag in all_tags %}
-                            <li><a href="#">{{ tag.name }}</a></li>
+                            <li><a href="{% url 'posts_by_tag' tag.slug %}">{{ tag.name }}</a></li>
                           {% endfor %}
                       </ul>
                     </div>
