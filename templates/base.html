@@ -33,7 +33,7 @@
     <!-- ***** Preloader End ***** -->
 
     <!-- Header -->
-    <header class="">
+    <header class="mb-5">
       <nav class="navbar navbar-expand-lg">
         <div class="container">
           <a class="navbar-brand" href="index.html"><h2>Stand Blog<em>.</em></h2></a>
@@ -62,9 +62,13 @@
       </nav>
     </header>
 
-    {% block content %}
 
-    {% endblock %}
+            {% block content %}
+
+            {% endblock %}
+
+
+
     <footer>
       <div class="container">
         <div class="row">
@@ -87,6 +91,8 @@
         </div>
       </div>
     </footer>
+
+
     {% block scripts %}
     <script src="{% static 'js/jquery.min.js' %}"></script>
         <!-- Additional Scripts -->

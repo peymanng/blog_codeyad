@@ -1,0 +1,13 @@
+input{
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid blueviolet;
+  outline: 0;
+  font-size: 1.3rem;
+  color: darkorchid;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+  font-weight: bold;
+}
