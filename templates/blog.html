@@ -40,7 +40,7 @@
                               <ul class="post-info">
                                 <li><a href="#">{{ post.author }}</a></li>
                                 <li><a href="#">{{ post.pub_date}}</a></li>
-                                <li><a href="#">12 Comments</a></li>
+                                <li><a href="#">{{ post.comments.all.count }}</a></li>
                               </ul>
                               <p>{{ post.description }}</p>
                               <div class="post-options">
