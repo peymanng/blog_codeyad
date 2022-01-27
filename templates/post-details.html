@@ -5,6 +5,19 @@ Stand Blog - Post Details
 {% endblock %}
 
 {% block content %}
+    <style>
+  @media screen and (min-width: 600px) {
+    .replyren form {
+      margin-left: -48px;
+      /* will touch very left side */
+    }
+
+    .replyren .replyren form {
+      margin-left: -96px;
+      /* will touch very left side */
+    }
+  }
+</style>
     <!-- Page Content -->
     <!-- Banner Starts Here -->
     <div class="heading-page header-text">
@@ -64,7 +77,7 @@ Stand Blog - Post Details
                       <ul class="post-info">
                         <li><a href="#">{{ post.author }}</a></li>
                         <li><a href="#">{{ post.pub_date}}</a></li>
-                        <li><a href="#">10 Comments</a></li>
+                        <li><a href="#">{{ allcomments.count }}</a></li>
                       </ul>
                       <p>{{ post.body|safe }}</p>
                       <div class="post-options">
@@ -85,45 +98,37 @@ Stand Blog - Post Details
                 <div class="col-lg-12">
                   <div class="sidebar-item comments">
                     <div class="sidebar-heading">
-                      <h2>4 comments</h2>
+                      <h2>{{ allcomments.count }} Comments</h2>
                     </div>
                     <div class="content">
                       <ul>
-                        <li>
-                          <div class="author-thumb">
-                            <img src="assets/images/comment-author-01.jpg" alt="">
-                          </div>
-                          <div class="right-content">
-                            <h4>Charles Kate<span>May 16, 2020</span></h4>
-                            <p>Fusce ornare mollis eros. Duis et diam vitae justo fringilla condimentum eu quis leo. Vestibulum id turpis porttitor sapien facilisis scelerisque. Curabitur a nisl eu lacus convallis eleifend posuere id tellus.</p>
-                          </div>
-                        </li>
-                        <li class="replied">
-                          <div class="author-thumb">
-                            <img src="assets/images/comment-author-02.jpg" alt="">
-                          </div>
-                          <div class="right-content">
-                            <h4>Thirteen Man<span>May 20, 2020</span></h4>
-                            <p>In porta urna sed venenatis sollicitudin. Praesent urna sem, pulvinar vel mattis eget.</p>
-                          </div>
-                        </li>
-                        <li>
-                          <div class="author-thumb">
-                            <img src="assets/images/comment-author-03.jpg" alt="">
-                          </div>
-                          <div class="right-content">
-                            <h4>Belisimo Mama<span>May 16, 2020</span></h4>
-                            <p>Nullam nec pharetra nibh. Cras tortor nulla, faucibus id tincidunt in, ultrices eget ligula. Sed vitae suscipit ligula. Vestibulum id turpis volutpat, lobortis turpis ac, molestie nibh.</p>
-                          </div>
-                        </li>
-                        <li class="replied">
-                          <div class="author-thumb">
-                            <img src="assets/images/comment-author-02.jpg" alt="">
-                          </div>
-                          <div class="right-content">
-                            <h4>Thirteen Man<span>May 22, 2020</span></h4>
-                            <p>Mauris sit amet justo vulputate, cursus massa congue, vestibulum odio. Aenean elit nunc, gravida in erat sit amet, feugiat viverra leo.</p>
-                          </div>
+                          {% load mptt_tags %}
+                        <li class="w-100">
+                            {% recursetree allcomments %}
+{#                                  <div class="author-thumb">#}
+{#                                    <img src="assets/images/comment-author-01.jpg" alt="">#}
+{#                                  </div>#}
+                                  <div id="{{ node.id }}" class="card my-3" style="">
+                                      <div class="card-body rounded bg-gradient bg-light">
+                                          <p>Comment By:</p><h4 class="mr-3 card-title">{{ node.name }}</h4><span class="text-muted">{{ node.pub_date }}</span>
+                                      <p class="card-text fw-bold">{{ node.body }}</p><hr>
+
+                                        {% if node.level < 3 %}
+                                          <button class="main-button mt-4 btn btn-success" onclick="myFunction({{ node.id }})">Reply</button>
+                                        {% endif %}
+                                      </div>
+                                            {% if not node.is_leaf_node %}
+                                                {% for reply in replies  %}
+                                        <div>
+                                                <div class="card-body text-white bg-dark border bg-gradient rounded">
+                                                    <p><h5>{{ reply.name }} replied:</h5></p><span class="text-muted">{{ reply.pub_date }}</span>
+                                                    <p class="card-text fw-bold">{{ reply.body }}</p>
+                                                </div>
+                                                {% endfor %}
+                                            {% endif %}
+                                      </div>
+                                </div>
+                            {% endrecursetree %}
                         </li>
                       </ul>
                     </div>
@@ -135,30 +140,12 @@ Stand Blog - Post Details
                       <h2>Your comment</h2>
                     </div>
                     <div class="content">
-                      <form id="comment" action="#" method="post">
+                      <form id="comment" action="{{ post.get_absolute_url }}" method="POST">
                         <div class="row">
                           <div class="col-md-6 col-sm-12">
-                            <fieldset>
-                              <input name="name" type="text" id="name" placeholder="Your name" required="">
-                            </fieldset>
-                          </div>
-                          <div class="col-md-6 col-sm-12">
-                            <fieldset>
-                              <input name="email" type="text" id="email" placeholder="Your email" required="">
-                            </fieldset>
-                          </div>
-                          <div class="col-md-12 col-sm-12">
-                            <fieldset>
-                              <input name="subject" type="text" id="subject" placeholder="Subject">
-                            </fieldset>
-                          </div>
-                          <div class="col-lg-12">
-                            <fieldset>
-                              <textarea name="message" rows="6" id="message" placeholder="Type your comment" required=""></textarea>
-                            </fieldset>
-                          </div>
-                          <div class="col-lg-12">
-                            <fieldset>
+                              <fieldset>
+                                {{ comment_form.as_p }}
+                                {% csrf_token %}
                               <button type="submit" id="form-submit" class="main-button">Submit</button>
                             </fieldset>
                           </div>
@@ -232,5 +219,36 @@ Stand Blog - Post Details
         </div>
       </div>
     </section>
+    <script>
+  function formExit() {
+    document.getElementById("newForm").remove();
+  }
 
+  function myFunction(id) {
+    if (document.contains(document.getElementById("newForm"))) {
+      document.getElementById("newForm").remove();
+    }
+
+    var d1 = document.getElementById(id);
+    d1.insertAdjacentHTML('afterend',
+      '<form id="newForm" action="{% url 'post_detail' post.slug %}" class="form-insert py-2" method="POST"> \
+                <div class="d-flex justify-content-between"><h2>Reply:</h2><div><button type="button" class="btn btn-outline-secondary" onclick="formExit()"">Close</button></div></div> \
+                <label for="id_name">Name:</label> \
+                <input type="text" name="name" class="col-sm-12" maxlength="50" required="" id="id_name">\
+                <select name="parent" class="d-none" id="id_parentt"> \
+                <option value="' + id + '" selected="' + id + '"></option> \
+                </select> \
+                <label for="id_email">Email:</label> \
+                <input type="text" name="email" class="col-sm-12" maxlength="254" required="" id="id_email"> \
+                <label for="id_content">Body:</label> \
+                <textarea name="body" cols="40" rows="5" class="form-control" required id="id_content"></textarea> \
+                {% csrf_token %} \
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Submit</button> \
+              </form>');
+
+    //document.querySelector('#id_parentt [value="' + id + '"]').selected = true;
+  }
+
+  $('#myForm').trigger("reset");
+</script>
 {% endblock %}

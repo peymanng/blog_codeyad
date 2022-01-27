@@ -1,8 +1,9 @@
 from taggit.models import Tag
 from django.shortcuts import render, get_list_or_404 , get_object_or_404
 from django.views.generic import ListView, TemplateView
-from django.views.generic.detail import DetailView
+from django.http import HttpResponseRedirect
 from .models import  Post
+from .forms import NewCommentForm
 
 class PostListView(ListView):
     model = Post
@@ -10,10 +11,30 @@ class PostListView(ListView):
     context_object_name = 'posts'
     paginate_by = 2
 
-class PostDetailView(DetailView):
-    model = Post
-    template_name = 'post-details.html'
-    context_object_name = 'post'
+def detail_view(request , slug):
+    post =get_object_or_404(Post , slug=slug)
+    allcomments = post.comments.filter(status=True,parent=None).order_by('-pub_date')
+    children = allcomments.get_descendants()
+    user_comment = None
+
+    if request.method == 'POST':
+        comment_form = NewCommentForm(request.POST)
+        if comment_form.is_valid():
+            user_comment = comment_form.save(commit=False)
+            user_comment.post = post
+            user_comment.save()
+            return HttpResponseRedirect('/posts/post/' + post.slug)
+    else:
+        comment_form = NewCommentForm()
+    return render(request,
+                  'post-details.html',
+                  {'post': post,
+                   'comments':  user_comment,
+                   'comment_form': comment_form
+                    ,'allcomments': allcomments,
+                    'replies' : children,
+                   })
+
 
 class CategoryPostList(TemplateView):
     template_name = 'blog.html'

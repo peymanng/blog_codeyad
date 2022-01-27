@@ -1,7 +1,8 @@
 from django.contrib import admin
-from .models import  Post , Category , Author
-
+from .models import  Post , Category , Author , Comment
+from mptt.admin import MPTTModelAdmin
 # Register your models here.
+
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title' , 'get_categories', 'slug' , 'tag_list' , 'pub_date')
@@ -18,4 +19,5 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('title' , 'slug')
     prepopulated_fields = {"slug": ("title",)}
 
+admin.site.register(Comment , MPTTModelAdmin)
 admin.site.register(Author)

@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     # django-ckeditor
     'ckeditor',
     'ckeditor_uploader',
+    # django-mptt
+    'mptt',
 ]
 
 MIDDLEWARE = [

@@ -1,6 +1,7 @@
 from django.db import models
 from ckeditor_uploader.fields import RichTextUploadingField
 from taggit.managers import TaggableManager
+from mptt.models import MPTTModel , TreeForeignKey
 
 class Author(models.Model):
     first_name = models.CharField(max_length=50)
@@ -40,3 +41,19 @@ class Post(models.Model):
 
     def get_absolute_url(self):
         return f'/posts/post/{self.slug}'
+
+class Comment(MPTTModel):
+
+    post = models.ForeignKey(Post,on_delete=models.CASCADE,related_name='comments')
+    parent = TreeForeignKey('self', on_delete=models.CASCADE,null=True, blank=True, related_name='children')
+    name = models.CharField(max_length=50)
+    email = models.EmailField()
+    body = models.TextField()
+    pub_date = models.DateTimeField(auto_now_add=True)
+    status = models.BooleanField(default=True)
+
+    class MPTTMeta:
+        ordering = ('pub_date',)
+
+    def __str__(self):
+        return self.name
