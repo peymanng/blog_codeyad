@@ -12,7 +12,7 @@ Stand CSS Blog by TemplateMo
         <div class="owl-banner owl-carousel">
             {% for slider_post in slider_posts %}
               <div class="item">
-                <img src="{{ slider_post.image.url }}" alt="">
+                  <a href="{% url 'post_detail' slider_post.slug %}"><img src="{{ slider_post.image.url }}" alt="post_image"></a>
                 <div class="item-content">
                   <div class="main-content">
                     <div class="meta-category">
@@ -21,7 +21,7 @@ Stand CSS Blog by TemplateMo
                         {% endfor %}
 
                     </div>
-                    <a href="post-details.html"><h4>{{ slider_post.title }}</h4></a>
+                    <a href="{% url 'post_detail' slider_post.slug %}"><h4>{{ slider_post.title }}</h4></a>
                     <ul class="post-info">
                       <li><a href="#">{{ slider_post.author }}</a></li>
                       <li><a href="#">{{ slider_post.pub_date}}</a></li>
