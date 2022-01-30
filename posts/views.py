@@ -2,6 +2,7 @@ from taggit.models import Tag
 from django.shortcuts import render, get_list_or_404 , get_object_or_404
 from django.views.generic import ListView, TemplateView
 from django.http import HttpResponseRedirect
+from django.db.models import Q
 from .models import  Post
 from .forms import NewCommentForm
 
@@ -54,3 +55,26 @@ class TagsPostListView(TemplateView):
         tag = get_object_or_404(Tag, slug=tag_slug)
         context['posts'] = get_list_or_404(Post , tags__name__in=[tag])
         return context
+
+class SearchView(ListView):
+    template_name = "blog.html"
+    model = Post
+    context_object_name = 'posts'
+    paginate_by = 2
+
+    def get_queryset(self):
+        searched = self.request.GET.get('search')
+        posts =self.model.objects.all()
+        page = self.request.GET.get('page')
+
+        if page:
+            searched = self.request.session['searched_word']
+        else:
+            self.request.session['searched_word'] = searched
+
+        if searched:
+            posts = Post.objects.filter(Q(title__icontains=searched) | Q(body__icontains=searched) | Q(description__icontains=searched)
+                                        | Q(tags__name__icontains=searched)).distinct()
+
+        return posts
+
